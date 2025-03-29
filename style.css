@@ -78,6 +78,8 @@ body{
     gap: 10px;
     flex-wrap: wrap;
     margin: 30px;
+    max-height: 66vh;
+    overflow-y:auto;
 }
 .card{
     width:200px;
@@ -100,4 +102,28 @@ body{
     right: 14px;
     top: 155px;
     transition: all 1s ease-in;
+}
+
+
+::-webkit-scrollbar {
+    width: 10px; 
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444; 
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666; 
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1a;
 }
