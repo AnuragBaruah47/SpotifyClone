@@ -31,17 +31,17 @@ body{
 }
 .heading{
     display: flex;
-    gap: 15px;
-    width: 14px;
+    gap: 10px;
+    width: 38px;
     padding-top: 14px;
     padding: 23px 14px;
     align-items: center;
     font-size: 13px;
 }
-.heading img{
-    width: 30px;
+.heading>h2{
+    font-size: 18px;
+    align-self: center;
 }
-
 .library{
     min-height: 80vh;
     position: relative;
@@ -60,6 +60,7 @@ body{
 
 .right{
     margin: 16px 0px;
+    position: relative;
 }
 .header{
     display: flex;
@@ -156,4 +157,17 @@ body{
 }
 .login-btn:hover{
     font-size: 17px;
+}
+
+.playbar{
+    position: absolute;
+    bottom: 0px;
+    background-color: #024a05;
+    width: 100%;
+    padding: 12px;
+}
+.songbuttons{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }
