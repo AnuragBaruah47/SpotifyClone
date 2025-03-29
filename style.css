@@ -56,3 +56,15 @@ body{
 .footer a {
     color: #7d7c7c;
 }
+
+.right{
+    margin: 16px 0px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(27, 27, 27);
+}
+.header > *{
+    padding: 20px;
+}
