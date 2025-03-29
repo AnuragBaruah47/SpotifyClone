@@ -127,3 +127,33 @@ body{
     scrollbar-width: thin;
     scrollbar-color: #444 #1a1a1a;
 }
+.buttons>*{
+    margin: 0 12px;
+}
+.signup-btn{
+    background-color: rgb(27, 27, 27);
+    color: #575757;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.signup-btn:hover{
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.login-btn{
+    background-color: #ffffff;
+    border-radius: 18px;
+    width: 80px;
+    cursor: pointer;
+    color: #000000;
+    font-weight: bold;
+    padding:10px;
+    font-size: 16px;
+}
+.login-btn:hover{
+    font-size: 17px;
+}
