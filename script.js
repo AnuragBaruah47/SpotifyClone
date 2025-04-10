@@ -1,23 +1,36 @@
+let currFolder;
+let songsArray=[]
+const button=document.querySelector(".signup-btn")
+async function getSongs(folder) {
+    currFolder = folder;  
+    let path = folder ? `/Songs/${folder}` : "/Songs";
+    console.log(path)
+    let a = await fetch("http://127.0.0.1:5500/Songs/RAP");
+    let response = await a.text();
+    console.log(response);
+    const div = document.createElement("div");
+    div.innerHTML = response;
+    let as = div.getElementsByTagName("a");
+    for (let i = 0; i < as.length; i++) {
+        const element = as[i];
+        if (element.href.endsWith(".mp3")) {
+            let songName = decodeURIComponent(element.href.split("/Songs/")[1]);
+            if (songName){
+               songsArray.push(songName)
+            };
+        }
+    }
+    console.log("Songs found in folder", currFolder + ":", songsArray);
+    
+}
+
 async function main() {
-    let a= await fetch("http://127.0.0.1:5500/Projects/Spotify_Clone/songs/HDV2")
-    let response= await a.text()
-    let songs=response.toString()
-   const div=document.createElement("div")
-   div.innerHTML=songs
-   div.getElementsByTagName("div")
-   const mainLi=div.getElementsByTagName("a")
-   console.log(mainLi);
-   
-//    const anchor=mainLi.getElementsByTagName("")
-   let songArray=[]
-   for (let index = 0; index < anchor.length; index++) {
-    const element = anchor[index];
-   const mainSong=element.href
-   if (mainSong.endsWith(".mp3")){
-     songArray.push(mainSong)
-   }
-   }
-   console.log(songArray);
-   
+    let songs= await getSongs('RAP')
+    //play the first song
+    let audio = new Audio(songsArray[0])
+    console.log(audio);
+    button.addEventListener("click",()=>{
+        audio.play()
+    })
 }
 main()
