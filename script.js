@@ -1,10 +1,7 @@
 let currFolder;
 let songsArray=[]
 const button=document.querySelector(".signup-btn")
-async function getSongs(folder) {
-    currFolder = folder;  
-    let path = folder ? `/Songs/${folder}` : "/Songs";
-    console.log(path)
+async function getSongs() {
     let a = await fetch("http://127.0.0.1:5500/Songs/RAP");
     let response = await a.text();
     console.log(response);
@@ -14,10 +11,7 @@ async function getSongs(folder) {
     for (let i = 0; i < as.length; i++) {
         const element = as[i];
         if (element.href.endsWith(".mp3")) {
-            let songName = decodeURIComponent(element.href.split("/Songs/")[1]);
-            if (songName){
-               songsArray.push(songName)
-            };
+            songsArray.push(element.href)
         }
     }
     console.log("Songs found in folder", currFolder + ":", songsArray);
