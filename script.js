@@ -41,6 +41,7 @@ const playMusic=(track)=>{
 }
 async function main() {
   let songs = await getSongs("RAP");
+  currentSongs.src=songsArray[0]
   let audio = new Audio(songsArray[0]);
   // show all the songs in the playlist
   let songUl = document
@@ -82,8 +83,14 @@ play.addEventListener("click",()=>{
 currentSongs.addEventListener("timeupdate",()=>{
   console.log(currentSongs.currentTime,currentSongs.duration)
   document.querySelector(".songtime").innerHTML=`${(formatSeconds(currentSongs.currentTime))}/${formatSeconds(currentSongs.duration)}`
+  document.querySelector(".circle").style.left=(currentSongs.currentTime/currentSongs.duration)*100 + "%"
 })
-
+// seek bar 
+document.querySelector(".seekbar").addEventListener("click",(e)=>{
+  let percent=(e.offsetX/e.target.getBoundingClientRect().width)*100
+  document.querySelector(".circle").style.left=percent + "%"
+  currentSongs.currentTime=(currentSongs.duration)*percent/100
+})
 
 
 main();
