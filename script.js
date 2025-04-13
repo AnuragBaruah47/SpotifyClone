@@ -1,20 +1,20 @@
 let currFolder;
-let currentSongs=new Audio()
+let currentSongs = new Audio();
 let songsArray = [];
 let songs;
 let source;
-const play=document.querySelector("#play")
+const play = document.querySelector("#play");
 const button = document.querySelector(".signup-btn");
 function formatSeconds(seconds) {
   if (isNaN(seconds) || seconds < 0) {
-      return "00:00";
+    return "00:00";
   }
 
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
 
-  const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
   return `${formattedMinutes}:${formattedSeconds}`;
 }
@@ -28,22 +28,22 @@ async function getSongs() {
   for (let i = 0; i < as.length; i++) {
     const element = as[i];
     if (element.href.endsWith(".mp3")) {
-      songsArray.push((element.href));
+      songsArray.push(element.href);
     }
   }
   // console.log("Songs found in folder", currFolder + ":", songsArray);
 }
-const playMusic=(track)=>{
-  source="http://127.0.0.1:5500/Songs/RAP/"+(track)
-  currentSongs.src=source
-  currentSongs.play()
-  play.src=`./img/pause.svg`
-  document.querySelector(".songinfo").innerHTML=decodeURIComponent(track)
-  document.querySelector(".songtime").innerHTML="00::00/00:00"
-}
+const playMusic = (track) => {
+  source = "http://127.0.0.1:5500/Songs/RAP/" + track;
+  currentSongs.src = source;
+  currentSongs.play();
+  play.src = `./img/pause.svg`;
+  document.querySelector(".songinfo").innerHTML = decodeURIComponent(track);
+  document.querySelector(".songtime").innerHTML = "00::00/00:00";
+};
 async function main() {
   songs = await getSongs("RAP");
-  currentSongs.src=songsArray[0]
+  currentSongs.src = songsArray[0];
   let audio = new Audio(songsArray[0]);
   // show all the songs in the playlist
   let songUl = document
@@ -64,50 +64,87 @@ async function main() {
             </li>`;
   }
   //attach an event listeners to each songs
-  Array.from(document.querySelector(".songslists").getElementsByTagName("li")).forEach(e=>{
-    e.addEventListener("click",()=>{
-      playMusic(encodeURIComponent(e.querySelector(".info").firstElementChild.innerHTML).replaceAll(" ",""))
-    })
-  })
+  Array.from(
+    document.querySelector(".songslists").getElementsByTagName("li")
+  ).forEach((e) => {
+    e.addEventListener("click", () => {
+      playMusic(
+        encodeURIComponent(
+          e.querySelector(".info").firstElementChild.innerHTML
+        ).replaceAll(" ", "")
+      );
+    });
+  });
 }
 
 //previous and next song
-play.addEventListener("click",()=>{
+play.addEventListener("click", () => {
   if (currentSongs.paused) {
-    currentSongs.play()
-    play.src=`./img/pause.svg`
-  }else if(currentSongs.played){
-    currentSongs.pause()
-    play.src="./img/play.svg"
+    currentSongs.play();
+    play.src = `./img/pause.svg`;
+  } else if (currentSongs.played) {
+    currentSongs.pause();
+    play.src = "./img/play.svg";
   }
-})
-//time update   
-currentSongs.addEventListener("timeupdate",()=>{
-  document.querySelector(".songtime").innerHTML=`${(formatSeconds(currentSongs.currentTime))}/${formatSeconds(currentSongs.duration)}`
-  document.querySelector(".circle").style.left=(currentSongs.currentTime/currentSongs.duration)*100 + "%"
-})
-// seek bar 
-document.querySelector(".seekbar").addEventListener("click",(e)=>{
-  let percent=(e.offsetX/e.target.getBoundingClientRect().width)*100
-  document.querySelector(".circle").style.left=percent + "%"
-  currentSongs.currentTime=(currentSongs.duration)*percent/100
-})
+});
+
+//time update
+currentSongs.addEventListener("timeupdate", () => {
+  document.querySelector(".songtime").innerHTML = `${formatSeconds(
+    currentSongs.currentTime
+  )}/${formatSeconds(currentSongs.duration)}`;
+  document.querySelector(".circle").style.left =
+    (currentSongs.currentTime / currentSongs.duration) * 100 + "%";
+});
+// seek bar
+document.querySelector(".seekbar").addEventListener("click", (e) => {
+  let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
+  document.querySelector(".circle").style.left = percent + "%";
+  currentSongs.currentTime = (currentSongs.duration * percent) / 100;
+});
+
 // prev and next
 
-previous.addEventListener("click",()=>{
-  let index=songsArray.indexOf(currentSongs.src)
-  if ((index-1)>=0) {
-    playMusic((decodeURIComponent(songsArray[index-1])).split("/RAP/")[1])
+previous.addEventListener("click", () => {
+  let index = songsArray.indexOf(currentSongs.src);
+  if (index - 1 >= 0) {
+    playMusic(decodeURIComponent(songsArray[index - 1]).split("/RAP/")[1]);
+  }
+});
+
+next.addEventListener("click", () => {
+  let index = songsArray.indexOf(currentSongs.src);
+  if (index + 1 < songsArray.length) {
+    playMusic(decodeURIComponent(songsArray[index + 1]).split("/RAP/")[1]);
+  }
+});
+
+addEventListener("keydown",(e)=>{
+  console.log(e.key);
+  if (e.key==="ArrowRight") {
+    let index = songsArray.indexOf(currentSongs.src);
+    if (index + 1 < songsArray.length) {
+      playMusic(decodeURIComponent(songsArray[index + 1]).split("/RAP/")[1]);
+    }
+  }else if(e.key==="ArrowLeft"){
+    let index = songsArray.indexOf(currentSongs.src);
+    if (index - 1 >= 0) {
+      playMusic(decodeURIComponent(songsArray[index - 1]).split("/RAP/")[1]);
+    }
+  }else if(e.key===" "){
+    if (currentSongs.paused) {
+      currentSongs.play();
+      play.src = `./img/pause.svg`;
+    } else if (currentSongs.played) {
+      currentSongs.pause();
+      play.src = "./img/play.svg";
+    }
   }
 })
 
-next.addEventListener("click",()=>{
-let index=songsArray.indexOf(currentSongs.src)
-console.log(source);
-console.log(index);
-if ((index+1)<songsArray.length) {
-  playMusic((decodeURIComponent(songsArray[index+1])).split("/RAP/")[1])
-}
+// volume
+document.querySelector(".range").getElementsByTagName("input")[0].addEventListener("change",(e)=>{
+  currentSongs.volume=parseInt(e.target.value)/100
 })
 
 main();

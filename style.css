@@ -171,6 +171,8 @@ body{
 .songbuttons{
     display: flex;
     justify-content: center;
+    position: absolute;
+    left: 650px;
     gap: 15px;
 }
 .songbuttons img{
@@ -219,13 +221,16 @@ body{
 }
 .circle{
     width: 18px;
-    height: 18px;
+    height: 18px; 
     border-radius: 13px;
     background: black;
     position: absolute;
     bottom: -6px;
     left: 0px;
-    transition: left 1s ;
+    transition: left 0.01s ease-in;
+}
+.songinfo{
+    width: 500px
 }
 .songinfo,.songtime{
     color: #000000;
@@ -234,4 +239,19 @@ body{
 .abovebar{
     display: flex;
     justify-content: space-between;
+}
+.volumecontainer{
+    display: flex;
+    position: absolute;
+    right: 120px;
+    align-items: center;
+    width: 200px;
+}
+.volume{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+#volbar{
+    cursor: pointer;
 }
