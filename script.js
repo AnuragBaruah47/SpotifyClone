@@ -1,6 +1,8 @@
 let currFolder;
 let currentSongs=new Audio()
 let songsArray = [];
+let songs;
+let source;
 const play=document.querySelector("#play")
 const button = document.querySelector(".signup-btn");
 function formatSeconds(seconds) {
@@ -32,7 +34,7 @@ async function getSongs() {
   // console.log("Songs found in folder", currFolder + ":", songsArray);
 }
 const playMusic=(track)=>{
-  let source="http://127.0.0.1:5500/Songs/RAP/"+(track)
+  source="http://127.0.0.1:5500/Songs/RAP/"+(track)
   currentSongs.src=source
   currentSongs.play()
   play.src=`./img/pause.svg`
@@ -40,7 +42,7 @@ const playMusic=(track)=>{
   document.querySelector(".songtime").innerHTML="00::00/00:00"
 }
 async function main() {
-  let songs = await getSongs("RAP");
+  songs = await getSongs("RAP");
   currentSongs.src=songsArray[0]
   let audio = new Audio(songsArray[0]);
   // show all the songs in the playlist
@@ -81,7 +83,6 @@ play.addEventListener("click",()=>{
 })
 //time update   
 currentSongs.addEventListener("timeupdate",()=>{
-  console.log(currentSongs.currentTime,currentSongs.duration)
   document.querySelector(".songtime").innerHTML=`${(formatSeconds(currentSongs.currentTime))}/${formatSeconds(currentSongs.duration)}`
   document.querySelector(".circle").style.left=(currentSongs.currentTime/currentSongs.duration)*100 + "%"
 })
@@ -91,6 +92,22 @@ document.querySelector(".seekbar").addEventListener("click",(e)=>{
   document.querySelector(".circle").style.left=percent + "%"
   currentSongs.currentTime=(currentSongs.duration)*percent/100
 })
+// prev and next
 
+previous.addEventListener("click",()=>{
+  let index=songsArray.indexOf(currentSongs.src)
+  if ((index-1)>=0) {
+    playMusic((decodeURIComponent(songsArray[index-1])).split("/RAP/")[1])
+  }
+})
+
+next.addEventListener("click",()=>{
+let index=songsArray.indexOf(currentSongs.src)
+console.log(source);
+console.log(index);
+if ((index+1)<songsArray.length) {
+  playMusic((decodeURIComponent(songsArray[index+1])).split("/RAP/")[1])
+}
+})
 
 main();
