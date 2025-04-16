@@ -33,13 +33,14 @@ async function getSongs(folder) {
       songsArray.push(element.href);
     }
   }
+
   // show all the songs in the playlist
   let songUl = document
     .querySelector(".songslists")
     .getElementsByTagName("ul")[0];
   songUl.innerHTML = ``;
   for (const song of songsArray) {
-    songUl.innerHTML =
+    songUl.innerHTML =                          //currFolder work needed
       songUl.innerHTML +
       `              <li><img src="./img/music.svg" class="invert" alt="home">
               <div class="info">
@@ -56,7 +57,7 @@ async function getSongs(folder) {
     document.querySelector(".songslists").getElementsByTagName("li")
   ).forEach((e) => {
     e.addEventListener("click", () => {
-      playMusic(
+      playMusic( 
         encodeURIComponent(
           e.querySelector(".info").firstElementChild.innerHTML
         ).replaceAll(" ", "")
@@ -67,29 +68,23 @@ async function getSongs(folder) {
 const playMusic = (track) => {
   source = `http://127.0.0.1:5500/Songs/${currFolder}` + track;
   currentSongs.src = source;
-  console.log(track)
-  console.log(`http://127.0.0.1:5500/Songs/${currFolder}` + track)
   currentSongs.play();
   play.src = `./img/pause.svg`;
   document.querySelector(".songinfo").innerHTML = decodeURIComponent(track);
-  console.log(decodeURIComponent(track));
   document.querySelector(".songtime").innerHTML = "00::00/00:00";
 };
 
 async function displayAlbums() {
-  //1
   let a = await fetch(`http://127.0.0.1:5500/Songs/`);
   let response = await a.text();
   const div = document.createElement("div");
   div.innerHTML = response;
   let allAnchors = div.querySelectorAll("a");
   for (let i = 0; i < allAnchors.length; i++) {
-    //2
     const e = allAnchors[i];
     if (e.href.includes("/Songs/")) {
-      //3
       let folder = e.href.split("/").splice(-2)[1];
-      //get meta data of folder
+      //get meta data of folder        
       let a = await fetch(`http://127.0.0.1:5500/Songs/${folder}/info.json`);
       let response = await a.json();
       let cardContainer = document.querySelector(".cardcontainer");
@@ -114,25 +109,20 @@ async function displayAlbums() {
             </div>`;
       //loading the library by clicking card
       document.querySelectorAll(".card").forEach((e) => {
-        //4
         e.addEventListener("click", async (item) => {
-          //5
-          songs = await getSongs(`${item.currentTarget.dataset.folder}`);
-        }); //5
-      }); //4
-    } //3
-  } //2
-} //1
+          songs = await getSongs(`${item.currentTarget.dataset.folder}`)
+          playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+        }); 
+      }); 
+    } 
+  } 
+} 
 
 async function main() {
   songs = await getSongs("HDV1");
   currentSongs.src = songsArray[0];
-
-  
-
   //display an Album
   displayAlbums();
-
   //previous and next song
   play.addEventListener("click", () => {
     if (currentSongs.paused) {
@@ -152,6 +142,15 @@ currentSongs.addEventListener("timeupdate", () => {
   )}/${formatSeconds(currentSongs.duration)}`;
   document.querySelector(".circle").style.left =
     (currentSongs.currentTime / currentSongs.duration) * 100 + "%";
+    if (currentSongs.currentTime==currentSongs.duration) {
+      if (songsArray.length==1) {
+        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+      }else if(((songsArray.indexOf(currentSongs.src)))==(songsArray.length-1)){
+        playMusic(songsArray[0].split("http://127.0.0.1:5500/Songs/HDV1")[1])
+      }else{
+        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+      }
+    }
 });
 // seek bar
 document.querySelector(".seekbar").addEventListener("click", (e) => {
@@ -167,9 +166,7 @@ previous.addEventListener("click", () => {
   if (index - 1 >= 0) {
     playMusic(
       decodeURIComponent(songsArray[index - 1]).split(`${currFolder}`)[1]
-    );
-    console.log((songsArray),"here");
-    
+    );   
   }
 });
 
@@ -205,7 +202,16 @@ addEventListener("keydown", (e) => {
       currentSongs.pause();
       play.src = "./img/play.svg";
     }
+  }else if(e.key==="m"){
+    if (currentSongs.volume=="0") {
+      currentSongs.volume=0.1
+      document.querySelector(".range").getElementsByTagName("input")[0].value=10
+    }else if(currentSongs.volume>0){    
+      currentSongs.volume=0
+      document.querySelector(".range").getElementsByTagName("input")[0].value=0
+    } 
   }
+  
 });
 
 // volume
@@ -228,5 +234,18 @@ document
       document.querySelector(".range").getElementsByTagName("input")[0].value=10
     }
   })
+// add a event listener for hamburger 
+document.querySelector(".hamburger").addEventListener("click",()=>{
+  document.querySelector(".left").style.left="0"
+  document.querySelector(".h1title").style.opacity="0"
+  document.querySelector(".playbar").style.opacity="0"
+})
 
+//add event listener for close
+document.querySelector(".left").addEventListener("click",()=>{
+    document.querySelector(".left").style.left="-110%"
+     document.querySelector(".h1title").style.opacity="100"
+       document.querySelector(".playbar").style.opacity="100"
+})
 main();
+
