@@ -21,7 +21,7 @@ function formatSeconds(seconds) {
 }
 async function getSongs(folder) {
   currFolder = folder;
-  let a = await fetch(`http://127.0.0.1:5500/Songs/${currFolder}`);
+  let a = await fetch(`https://whikingspotifyclone.netlify.app/Songs/${currFolder}`);
   let response = await a.text();
   const div = document.createElement("div");
   div.innerHTML = response;
@@ -66,7 +66,7 @@ async function getSongs(folder) {
   });
 }
 const playMusic = (track) => {
-  source = `http://127.0.0.1:5500/Songs/${currFolder}` + track;
+  source = `https://whikingspotifyclone.netlify.app/Songs/${currFolder}` + track;
   currentSongs.src = source;
   currentSongs.play();
   play.src = `./img/pause.svg`;
@@ -75,7 +75,7 @@ const playMusic = (track) => {
 };
 
 async function displayAlbums() {
-  let a = await fetch(`http://127.0.0.1:5500/Songs/`);
+  let a = await fetch(`https://whikingspotifyclone.netlify.app/Songs/`);
   let response = await a.text();
   const div = document.createElement("div");
   div.innerHTML = response;
@@ -85,7 +85,7 @@ async function displayAlbums() {
     if (e.href.includes("/Songs/")) {
       let folder = e.href.split("/").splice(-2)[1];
       //get meta data of folder        
-      let a = await fetch(`http://127.0.0.1:5500/Songs/${folder}/info.json`);
+      let a = await fetch(`https://whikingspotifyclone.netlify.app/Songs/${folder}/info.json`);
       let response = await a.json();
       let cardContainer = document.querySelector(".cardcontainer");
       cardContainer.innerHTML =
@@ -111,7 +111,7 @@ async function displayAlbums() {
       document.querySelectorAll(".card").forEach((e) => {
         e.addEventListener("click", async (item) => {
           songs = await getSongs(`${item.currentTarget.dataset.folder}`)
-          playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+          playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`https://whikingspotifyclone.netlify.app/Songs/${currFolder}`)[1])
         }); 
       }); 
     } 
@@ -144,11 +144,11 @@ currentSongs.addEventListener("timeupdate", () => {
     (currentSongs.currentTime / currentSongs.duration) * 100 + "%";
     if (currentSongs.currentTime==currentSongs.duration) {
       if (songsArray.length==1) {
-        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))].split(`https://whikingspotifyclone.netlify.app/Songs/${currFolder}`)[1])
       }else if(((songsArray.indexOf(currentSongs.src)))==(songsArray.length-1)){
-        playMusic(songsArray[0].split("http://127.0.0.1:5500/Songs/HDV1")[1])
+        playMusic(songsArray[0].split("https://whikingspotifyclone.netlify.app/Songs/HDV1")[1])
       }else{
-        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`http://127.0.0.1:5500/Songs/${currFolder}`)[1])
+        playMusic(songsArray[(songsArray.indexOf(currentSongs.src))+1].split(`https://whikingspotifyclone.netlify.app/Songs/${currFolder}`)[1])
       }
     }
 });
